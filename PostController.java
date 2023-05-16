@@ -1,50 +1,46 @@
-package com.example.facebookapi.Controller;
+package com.foodies.foodies.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.UUID;
-
+import com.foodies.foodies.model.Post;
+import com.foodies.foodies.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.facebookapi.Entity.Post;
-import com.example.facebookapi.Service.PostService;
-@CrossOrigin
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/postService")
+@RequestMapping("/posts")
 public class PostController {
-	
-	@Autowired
-	PostService postService;
 
-	@PostMapping("/save")
-	public ArrayList<Post> submitPost(@RequestBody Post body){
-		ArrayList<Post> result=postService.submitPostToDB(body);
-		return result;
-	}
-	
-	@GetMapping("/getPost")
-	public ArrayList<Post> retrieveAllPost(){
-		ArrayList<Post> result=postService.retrivePostFromDB();
-		result.sort((e1, e2) -> e2.getDateTime().compareTo(e1.getDateTime()));
-		return result;
-	}
-	
-	@DeleteMapping("/delete/{postId}")
-	public ArrayList<Post> deleteParticularPost(@PathVariable("postId") UUID postID){
-		ArrayList<Post> result=postService.deletePostFromDB(postID);
-		return result;
-	}
-	
-	
+    @Autowired
+    private PostService postService;
+
+    @PostMapping("/save")
+    public Post newPost(@RequestBody Post post){
+        return postService.createPost(post);
+    }
+    @GetMapping("/get-all-posts")
+    public List<Post> getAllPosts(){
+        return postService.getAllPosts();
+    }
+    @PatchMapping("/update-post")
+    public Post updatePost(@RequestBody Post post){
+        return  postService.updatePost(post);
+    }
+    @DeleteMapping("/delete-post/{id}")
+    public void deletePost(@PathVariable Long id){
+        postService.deletePost(id);
+
+    }
+    @GetMapping("/get-post/{id}")
+    public Post getPost(@PathVariable Long id){
+        return postService.getPost(id);
+
+    }
+
+    @GetMapping("/get-user-post/{userId}")
+    public Post getUserPost(@PathVariable Long userId){
+        return postService.getUserPost(userId);
+
+    }
+
 }
