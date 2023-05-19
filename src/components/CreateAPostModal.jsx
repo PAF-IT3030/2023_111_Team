@@ -27,14 +27,15 @@ const CreateAPostModal = () => {
     let data = {
       description: description,
       title: title,
-      imagePath: "/images/new_post.jpg",
+      imagePath:images[0],
+      // imagePath: "https://placehold.co/600x400/000000/FFFFFF/png",
       tags: hashtag,
       likes: 0,
       userId: 1,
     };
     await CreatePost(data);
     cleanFieldValues();
-    // window.location.reload();
+    window.location.reload();
   };
 
   const onClickPostCancel = () => {
